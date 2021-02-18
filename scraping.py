@@ -3,6 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 
+HEADERS = ['Data statystyki', 'Zatrzymani nietrzeźwi kierujący', 'Wypadki drogowe', 'Zabici w wypadkach',
+           'Ranni w wypadkach']
+
 
 class ScrapeData:
     """Scrape web data class
@@ -32,9 +35,9 @@ class ScrapeData:
 
     def get_data(self, soup: BeautifulSoup) -> list:
         """Get the proper data and divide it to list of days"""
-        data = soup.find("table", {"class": self._table_class}).find_all('td')
+        data = soup.find("table", {"class": self._table_class}).find_all('td', {'data-label': HEADERS})
         data = [item.text for item in data]
-        data = [data[i:i + 8] for i in range(0, len(data), 8)]
+        data = [data[i:i + 5] for i in range(0, len(data), 5)]
         return data
 
     def collect_data(self) -> list:
